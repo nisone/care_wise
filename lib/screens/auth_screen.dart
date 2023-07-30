@@ -32,7 +32,7 @@ class _AuthScreenState extends State<AuthScreen> {
               title: Text('An error ocurred'),
               content: Text(message),
               actions: [
-                FlatButton(
+                TextButton(
                   child: Text('Ok'),
                   onPressed: () {
                     Navigator.of(context).pop();
@@ -87,10 +87,10 @@ class _AuthScreenState extends State<AuthScreen> {
     }
   }
 
+  final EmailAuth emailAuth = EmailAuth(sessionName: "CareWise");
   void _sendOtp() async {
-    EmailAuth.sessionName = "CareWise";
     bool result =
-        await EmailAuth.sendOtp(receiverMail: _emailcontroller.value.text);
+        await emailAuth.sendOtp(recipientMail: _emailcontroller.value.text);
     if (result) {
       setState(() {
         submitValid = true;
@@ -99,9 +99,9 @@ class _AuthScreenState extends State<AuthScreen> {
   }
 
   void verify() {
-    print(EmailAuth.validate(
-        receiverMail: _emailcontroller.value.text,
-        userOTP: _otpcontroller.value.text));
+    print(emailAuth.validateOtp(
+        recipientMail: _emailcontroller.value.text,
+        userOtp: _otpcontroller.value.text));
   }
 
   @override
@@ -189,12 +189,8 @@ class _AuthScreenState extends State<AuthScreen> {
                     ),
                     SizedBox(width: double.infinity, height: 20.0),
                     if (_authMode == AuthMode.Signup)
-                      FlatButton(
+                      TextButton(
                         child: Text('Send OTP'),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(40.0)),
-                        color: Colors.green,
-                        textColor: Colors.white,
                         onPressed: () {
                           _sendOtp();
                           showModalBottomSheet(
@@ -231,20 +227,13 @@ class _AuthScreenState extends State<AuthScreen> {
                                           SizedBox(
                                               width: double.infinity,
                                               height: 10.0),
-                                          FlatButton(
+                                          TextButton(
                                             onPressed: !submitValid
                                                 ? null
                                                 : () {
                                                     Navigator.of(context).pop();
                                                   },
                                             child: Text("Verify"),
-                                            disabledColor: Colors.grey[600],
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                        40.0)),
-                                            color: Colors.green,
-                                            textColor: Colors.white,
                                           )
                                         ],
                                       ),
@@ -256,7 +245,7 @@ class _AuthScreenState extends State<AuthScreen> {
                       ),
                     if (_isLoading) CircularProgressIndicator(),
                     if (!_isLoading)
-                      FlatButton(
+                      TextButton(
                         onPressed:
                             (_authMode == AuthMode.Signup && !submitValid)
                                 ? null
@@ -269,26 +258,17 @@ class _AuthScreenState extends State<AuthScreen> {
                         child: Text(_authMode == AuthMode.Login
                             ? 'Login'
                             : 'Create Account'),
-                        textColor: Colors.white,
-                        color: Colors.green,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(40.0)),
-                        disabledColor: Colors.grey[400],
                       ),
                     SizedBox(width: double.infinity, height: 20.0),
                     Text(_authMode == AuthMode.Login
                         ? 'Not a User?'
                         : 'Already a User?'),
                     SizedBox(width: double.infinity, height: 20.0),
-                    FlatButton(
+                    TextButton(
                       onPressed: _switchAuthMode,
                       child: Text(_authMode == AuthMode.Login
                           ? 'Create New Account'
                           : 'I already have an account'),
-                      color: Colors.green,
-                      textColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(40.0)),
                     ),
                   ],
                 ),

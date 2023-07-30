@@ -1,7 +1,6 @@
 //import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
@@ -37,7 +36,7 @@ class Medicine with ChangeNotifier {
     final url =
         'https://flutter-carewise-default-rtdb.firebaseio.com/medicines/$id.json?auth=$token';
     try {
-      await http.patch(url,
+      await http.patch(Uri.parse(url),
           body: json.encode({
             'quantity': quantity - 1,
           }));

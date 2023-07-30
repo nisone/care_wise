@@ -21,7 +21,7 @@ class Notifications with ChangeNotifier {
     //onDidReceiveLocalNotification: onDidReceiveLocalNotification);
 
     var initializationSettings =
-        InitializationSettings(initializationSettingsAndroid, null);
+        InitializationSettings(android: initializationSettingsAndroid);
 
     flutterLocalNotificationsPlugin.initialize(initializationSettings,
         onSelectNotification: onSelectNotification);
@@ -29,22 +29,22 @@ class Notifications with ChangeNotifier {
 
   void showNotificationDaily(
       int id, String title, String body, int hour, int minute) async {
-    var time = new Time(hour, minute, 0);
-    await flutterLocalNotificationsPlugin.showDailyAtTime(
-        id, title, body, time, getPlatformChannelSpecfics());
+    var time = new DateTime(hour, minute, 0);
+    await FlutterLocalNotificationsPlugin().periodicallyShow(
+        id, title, body, RepeatInterval.daily, getPlatformChannelSpecfics());
     print('Notification Succesfully Scheduled at ${time.toString()}');
     notifyListeners();
   }
 
   getPlatformChannelSpecfics() {
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-        'your channel id', 'your channel name', 'your channel description',
-        importance: Importance.Max,
-        priority: Priority.High,
+        'your channel id', 'your channel name',channelDescription: 'your channel description',
+        importance: Importance.max,
+        priority: Priority.high,
         ticker: 'Medicine Reminder');
     //var iOSPlatformChannelSpecifics = IOSNotificationDetails();
     var platformChannelSpecifics =
-        NotificationDetails(androidPlatformChannelSpecifics, null);
+        NotificationDetails(android: androidPlatformChannelSpecifics,);
 
     return platformChannelSpecifics;
   }

@@ -57,29 +57,30 @@ class _AddMedicineState extends State<AddMedicine> {
     return format.format(dt);
   }
 
-  StorageReference storageReference = FirebaseStorage.instance.ref();
+  Reference storageReference = FirebaseStorage.instance.ref();
   void pickImage() async {
     final picker = ImagePicker();
-    pickedImage = await picker.getImage(
+    pickedImage = await picker.pickImage(
         source: ImageSource.camera,
         maxHeight: 480,
         maxWidth: 640,
         imageQuality: 50);
     final pickedImageFile = File(pickedImage.path);
-    StorageReference ref = storageReference.child("gs://$pickedImageFile");
-    StorageUploadTask uploadTask = ref.putFile(pickedImageFile);
-    StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
-    String imageurl = await taskSnapshot.ref.getDownloadURL();
-    print(imageurl);
-    setState(() {
-      pickedImage = pickedImageFile;
-      _editedMedicine = Medicine(
-          id: null,
-          title: _editedMedicine.title,
-          description: _editedMedicine.description,
-          alarmTime: _editedMedicine.alarmTime,
-          imageurl: imageurl,
-          quantity: _editedMedicine.quantity);
+    Reference ref = storageReference.child("gs://$pickedImageFile");
+    UploadTask uploadTask = ref.putFile(pickedImageFile);
+    uploadTask.then((taskSnapshot) async {
+      String imageurl = await taskSnapshot.ref.getDownloadURL();
+      print(imageurl);
+      setState(() {
+        pickedImage = pickedImageFile;
+        _editedMedicine = Medicine(
+            id: null,
+            title: _editedMedicine.title,
+            description: _editedMedicine.description,
+            alarmTime: _editedMedicine.alarmTime,
+            imageurl: imageurl,
+            quantity: _editedMedicine.quantity);
+      });
     });
   }
 
@@ -247,16 +248,12 @@ class _AddMedicineState extends State<AddMedicine> {
                             Text(selectedTime == null
                                 ? "No time selected"
                                 : formatTimeOfDay(selectedTime)),
-                            FlatButton(
+                            TextButton(
                               onPressed: () {
                                 _presentTimePicker();
                                 // ignore: unnecessary_statements
                               },
                               child: Text("Select Time"),
-                              textColor: Colors.white,
-                              color: Colors.green,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(40.0)),
                             )
                           ],
                         ),
@@ -273,14 +270,14 @@ class _AddMedicineState extends State<AddMedicine> {
                                   ? NetworkImage(_editedMedicine.imageurl)
                                   : null,
                             ),
-                            FlatButton.icon(
+                            TextButton.icon(
                               onPressed: pickImage,
                               icon: Icon(Icons.camera),
                               label: Text("Add an image"),
                             ),
                           ],
                         ),
-                        FlatButton(
+                        TextButton(
                           onPressed: () {
                             _saveForm(notifications);
                             Provider.of<MedicineList>(context, listen: false)
@@ -292,7 +289,7 @@ class _AddMedicineState extends State<AddMedicine> {
                                   title: Text('An error occured'),
                                   content: Text(err.toString()),
                                   actions: <Widget>[
-                                    FlatButton(
+                                    TextButton(
                                       child: Text("Ok"),
                                       onPressed: () => Navigator.of(ctx).pop(),
                                     )
@@ -307,11 +304,6 @@ class _AddMedicineState extends State<AddMedicine> {
                             });
                           },
                           child: Text('Save'),
-                          height: 50.0,
-                          textColor: Colors.white,
-                          color: Colors.green,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(40.0)),
                         ),
                         /*  TextFormField(
                     keyboardType: TextInputType.datetime,

@@ -71,7 +71,7 @@ class MedicineItem extends StatelessWidget {
                   children: <Widget>[
                     Icon(Icons.alarm),
                     Text(formatTimeOfDay(med.alarmTime)),
-                    FlatButton(
+                    TextButton(
                       onPressed: () {
                         log.addItem(med.id, med.title);
                         //ERROR: Items out of the screen are not getting added to the logbook
@@ -82,10 +82,6 @@ class MedicineItem extends StatelessWidget {
                         print(med.quantity);
                       },
                       child: Text("Check"),
-                      color: Colors.green,
-                      textColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(40.0)),
                     ),
                   ],
                 ),

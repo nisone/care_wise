@@ -1,6 +1,7 @@
 import 'package:carewise/providers/auth.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -19,7 +20,9 @@ import 'providers/inventory_provider.dart';
 import 'providers/medicine.dart';
 import 'services/notifications.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 
@@ -50,8 +53,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => Notifications(),
         ),
-        StreamProvider<FirebaseUser>.value(
-          value: FirebaseAuth.instance.onAuthStateChanged,
+        StreamProvider<User>.value(
+          value: FirebaseAuth.instance.authStateChanges(),
+          initialData: null,
         ),
       ],
       child: Consumer<Auth>(
@@ -59,8 +63,8 @@ class MyApp extends StatelessWidget {
           title: 'CareWise',
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
-            primarySwatch: Colors.green,
-            buttonColor: Color(0xA846A0),
+            useMaterial3: true,
+            colorSchemeSeed: Colors.green,
             visualDensity: VisualDensity.adaptivePlatformDensity,
           ),
           home: auth.isAuth

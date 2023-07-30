@@ -80,7 +80,7 @@ class _CreateAccountState extends State<CreateAccount> {
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30.0)),
                 )),
-            FlatButton(
+            TextButton(
               onPressed: () {
                 Navigator.push(
                   context,
@@ -88,10 +88,6 @@ class _CreateAccountState extends State<CreateAccount> {
                 );
               },
               child: Text('Create Account'),
-              textColor: Colors.white,
-              color: Colors.green,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(40.0)),
             ),
           ],
         ),

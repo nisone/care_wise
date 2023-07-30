@@ -198,13 +198,9 @@ class _EditMedicineState extends State<EditMedicine> {
                   Text(_selectedTime == null
                       ? formatTimeOfDay(_editedMedicine.alarmTime)
                       : formatTimeOfDay(_selectedTime)),
-                  FlatButton(
+                  TextButton(
                     onPressed: _presentTimePicker,
                     child: Text("Select Time"),
-                    textColor: Colors.white,
-                    color: Colors.green,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(40.0)),
                   )
                 ],
               ),

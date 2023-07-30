@@ -54,20 +54,20 @@ class _MedicineDetailState extends State<MedicineDetail> {
                   title: Text('Delete Medicine'),
                   content: Text("Do you want to delete this medicine?"),
                   actions: <Widget>[
-                    FlatButton(
+                    TextButton(
                       child: Text("No"),
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
                     ),
-                    FlatButton(
+                    TextButton(
                         child: Text('Yes'),
                         onPressed: () {
                           try {
                             Provider.of<MedicineList>(context, listen: false)
                                 .deleteItem(loadedMedicine.id);
                           } catch (error) {
-                            Scaffold.of(context).showSnackBar(
+                            ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content: Text('Deleting failed'),
                               ),

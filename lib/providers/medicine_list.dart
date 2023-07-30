@@ -92,7 +92,7 @@ class MedicineList with ChangeNotifier {
     const url =
         'https://flutter-carewise-default-rtdb.firebaseio.com/users.json';
     try {
-      final response = await http.get(url);
+      final response = await http.get(Uri.parse(url));
       final fetchedData = json.decode(response.body) as Map<String, dynamic>;
       String userid = fetchedData['id'];
       print(userid);
@@ -106,7 +106,7 @@ class MedicineList with ChangeNotifier {
     final url =
         'https://flutter-carewise-default-rtdb.firebaseio.com/medicines.json?auth=$authToken&orderBy="userId"&equalTo="$userId"';
     try {
-      final response = await http.get(url);
+      final response = await http.get(Uri.parse(url));
       final List<Medicine> loadedMeds = [];
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
       if (extractedData == null) {
@@ -135,7 +135,7 @@ class MedicineList with ChangeNotifier {
         'https://flutter-carewise-default-rtdb.firebaseio.com/medicines.json?auth=$authToken';
     try {
       final response = await http.post(
-        url,
+        Uri.parse(url),
         body: json.encode({
           'title': med.title,
           'description': med.description,
@@ -168,7 +168,7 @@ class MedicineList with ChangeNotifier {
 
     _items.removeAt(existingMedIndex);
     notifyListeners();
-    final response = await http.delete(url);
+    final response = await http.delete(Uri.parse(url));
     if (response.statusCode >= 400) {
       _items.insert(existingMedIndex, existingMed);
       notifyListeners();
@@ -183,7 +183,7 @@ class MedicineList with ChangeNotifier {
         'https://flutter-carewise-default-rtdb.firebaseio.com/medicines/$id.json?auth=$authToken';
     if (medIndex >= 0) {
       try {
-        await http.patch(url,
+        await http.patch(Uri.parse(url),
             body: json.encode({
               'title': editedMed.title,
               'quantity': editedMed.quantity,
